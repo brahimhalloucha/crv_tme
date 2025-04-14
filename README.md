@@ -12,7 +12,6 @@ This project demonstrates how to containerize and orchestrate a modern web appli
 - **Monitoring**: Prometheus and Grafana  
 - **Exposing services**: LocalTunnel & NodePorts  
 - **Container Orchestration**: Kubernetes  
-- **IaC structure**: Organized Kubernetes manifests by component
 
 ---
 

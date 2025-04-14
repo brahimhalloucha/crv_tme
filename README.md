@@ -1,8 +1,3 @@
-Absolutely! Here's your updated and corrected `README.md`, now including a section on pulling images directly from Docker Hub:
-
----
-
-```markdown
 # 🚀 CRV_TME — Autoscaling Infrastructure with Kubernetes, Prometheus & Grafana
 
 This project demonstrates how to containerize and orchestrate a modern web application using **Docker**, **Kubernetes**, **Redis (master/replica)**, and **LocalTunnel**, while integrating **Prometheus** and **Grafana** for observability.

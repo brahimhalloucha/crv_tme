@@ -1,41 +1,52 @@
-Thanks for sharing your repo! Based on your project structure and what you’ve accomplished (Dockerfiles, Kubernetes deployments, Prometheus, Grafana, Redis main/replica, LocalTunnel, etc.), here’s a solid `README.md` you can start with:
+Absolutely! Here's your updated and corrected `README.md`, now including a section on pulling images directly from Docker Hub:
 
 ---
 
 ```markdown
-# CRV_TME - Autoscaling Infrastructure with Monitoring
+# 🚀 CRV_TME — Autoscaling Infrastructure with Kubernetes, Prometheus & Grafana
 
-This project sets up a cloud-native, scalable infrastructure using Docker, Kubernetes, Prometheus, and Grafana. It demonstrates container orchestration, monitoring, and exposing services securely using LocalTunnel.
+This project demonstrates how to containerize and orchestrate a modern web application using **Docker**, **Kubernetes**, **Redis (master/replica)**, and **LocalTunnel**, while integrating **Prometheus** and **Grafana** for observability.
 
---
-## 🚀 Setup & Run
+---
 
-### 1. 📦 Build Docker Images
+## 🛠️ Project Overview
+
+- **Backend**: Node.js with Redis integration  
+- **Frontend**: React  
+- **Database**: Redis with a master/replica setup  
+- **Monitoring**: Prometheus and Grafana  
+- **Exposing services**: LocalTunnel & NodePorts  
+- **Container Orchestration**: Kubernetes  
+- **IaC structure**: Organized Kubernetes manifests by component
+
+---
+
+## 📦 Step 1: Build Docker Images (Optional)
+
+You can either build the images locally or pull them from Docker Hub.
+
+### 🔧 Option A: Build Locally
 
 ```bash
 # Backend
 cd Dockerfiles/backend
-docker build -t backend-crv .
+docker build -t backend-img .
 
 # Frontend
 cd ../frontend
-docker build -t frontend-crv .
+docker build -t frontend-img .
 ```
 
----
+### 🌐 Option B: Pull from Docker Hub
 
-### 2. 📥 Push to Minikube Docker (optional)
-
-If you're using Minikube's internal Docker:
 ```bash
-eval $(minikube docker-env)
-docker build -t backend-crv ./Dockerfiles/backend
-docker build -t frontend-crv ./Dockerfiles/frontend
+docker pull brahimhalloucha/backend-img
+docker pull brahimhalloucha/frontend-img
 ```
 
 ---
 
-### 3. ☸️ Start Kubernetes Cluster
+## ☸️ Step 2: Start Minikube Cluster
 
 ```bash
 minikube start
@@ -43,29 +54,40 @@ minikube start
 
 ---
 
-### 4. 📦 Deploy Components
+## 🐳 Step 3: Load Images into Minikube (if built locally)
 
 ```bash
-# Redis
-kubectl apply -f kubernetes/redis
-kubectl apply -f kubernetes/redis-replica
+minikube image load backend-img
+minikube image load frontend-img
+```
 
-# Backend
-kubectl apply -f kubernetes/node-server
+*Skip this step if you are pulling from Docker Hub inside Kubernetes.*
 
-# Frontend
-kubectl apply -f kubernetes/frontend
+---
+
+## 🚀 Step 4: Deploy All Components
+
+```bash
+# Redis (master + replica)
+minikube kubectl -- apply -f kubernetes/redis/
+minikube kubectl -- apply -f kubernetes/redis-replica/
+
+# Backend Node.js API
+minikube kubectl -- apply -f kubernetes/node-server/
+
+# React Frontend
+minikube kubectl -- apply -f kubernetes/frontend/
 
 # Prometheus
-kubectl apply -f prometheus/
+minikube kubectl -- apply -f prometheus/
 
 # Grafana
-kubectl apply -f grafana/
+minikube kubectl -- apply -f grafana/
 ```
 
 ---
 
-### 5. 🌐 Access Services
+## 🌐 Step 5: Access Services
 
 ```bash
 # Prometheus
@@ -74,64 +96,84 @@ minikube service prometheus-service
 # Grafana
 minikube service grafana
 
+# Backend
+minikube service node-server-service
+
 # Frontend
 minikube service frontend-service
 ```
 
-Or use:
-```bash
-minikube tunnel
-```
+---
+
+## 📊 Step 6: Configure Grafana
+
+1. Open Grafana (default login: `admin` / `admin`)
+2. Add a **Prometheus** data source:
+   - **Type**: Prometheus
+   - **URL**: `http://prometheus-service:9090`
+3. Import community dashboards, such as:
+   - **Node Exporter Full**: ID `1860`
+   - **Kubernetes Cluster Monitoring**: ID `6417`
 
 ---
 
-### 6. 📊 Configure Grafana
-
-- Login: `admin / admin`
-- Add Prometheus as a data source (URL: `http://prometheus-service:9090`)
-- Import dashboards from Grafana community (e.g., Node Exporter Full)
-
----
-
-### 7. 🌍 Expose Node Server with LocalTunnel
+## 🌍 Step 7: Expose Backend with LocalTunnel
 
 ```bash
+chmod +x start-localtunnel.sh
 ./start-localtunnel.sh
 ```
 
-This exposes your backend service to the web at `https://backend-crv.loca.lt`.
+This will expose your backend service publicly at:  
+➡️ **https://backend-crv.loca.lt**
 
 ---
 
-## 🧠 Features
+## 📁 Project Structure
 
-- **Node.js Backend with Redis integration**
-- **React Frontend**
-- **Redis Master/Replica pattern**
-- **Monitoring with Prometheus & Grafana**
-- **LocalTunnel for public exposure**
-- **Kubernetes manifests for full orchestration**
-- **Scalable, Observable, and DevOps-ready setup**
+```
+crv_tme/
+│
+├── Dockerfiles/
+│   ├── backend/
+│   └── frontend/
+│
+├── kubernetes/
+│   ├── redis/
+│   ├── redis-replica/
+│   ├── node-server/
+│   └── frontend/
+│
+├── prometheus/
+│   ├── prometheus-config.yaml
+│   ├── prometheus-deployment.yaml
+│   └── prometheus-service.yaml
+│
+├── grafana/
+│   └── grafana-deployment.yaml
+│
+├── start-localtunnel.sh
+└── README.md
+```
 
 ---
 
-## 📸 Screenshots
+## 💡 Features
 
-> Add screenshots of Grafana dashboards and Prometheus UI here.
+- ✅ Node.js + Redis backend  
+- ✅ React frontend  
+- ✅ Redis replication (master/replica)  
+- ✅ Kubernetes-based orchestration  
+- ✅ Monitoring with Prometheus + Grafana  
+- ✅ Public exposure via LocalTunnel  
+- ✅ Docker images available via Docker Hub  
+- ✅ Fully containerized & scalable infrastructure  
 
 ---
 
 ## 👤 Author
 
-[brahimhalloucha](https://github.com/brahimhalloucha)
+> [brahimhalloucha](https://github.com/brahimhalloucha)
 
 ---
 
-## 📜 License
-
-MIT License
-```
-
----
-
-Let me know if you want this `README.md` pushed directly into your repo or if you want it tailored further (e.g., include `kubectl port-forward`, horizontal pod autoscaling setup, Grafana dashboard JSON IDs, etc).# crv_tme
